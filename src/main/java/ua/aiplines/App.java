@@ -1,5 +1,7 @@
 package ua.aiplines;
 
+import java.math.BigDecimal;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -10,7 +12,9 @@ import ua.aiplines.entity.Destination;
 import ua.aiplines.entity.Flight;
 import ua.aiplines.entity.Passenger;
 import ua.aiplines.entity.Plane;
+import ua.aiplines.entity.Ticket;
 import ua.aiplines.entity.enums.PlaneType;
+import ua.aiplines.entity.enums.SeatsClass;
 
 
 public class App {
@@ -19,11 +23,12 @@ public class App {
         EntityManager em = factory.createEntityManager();
         
         em.getTransaction().begin();
-//        
-//        addCountryAndCity(em);
-//        addAirCompanyAndPlane(em);
-//        addFlight(em);
-//        addPassenger(em);
+        
+        addCountryAndCity(em);
+        addAirCompanyAndPlane(em);
+        addFlight(em);
+        addPassenger(em);
+        addTicket(em);
         
         
         em.getTransaction().commit();
@@ -94,6 +99,20 @@ public class App {
     }
     
     private static void addTicket(EntityManager em) {
+    	Flight flight = em.createQuery("select f from Flight f where f.id = :fId", Flight.class)
+    			.setParameter("fId", 1L).getSingleResult();
     	
+    	Passenger passenger = em.createQuery("select p from Passenger p where p.id = :pId", Passenger.class)
+    			.setParameter("pId", 1L).getSingleResult();
+    	
+    	Ticket ticket = new Ticket();
+    	ticket.setFlight(flight);
+    	ticket.setPassenger(passenger);
+    	ticket.setArrivaleDate(flight.getArrivalTime());
+    	ticket.setDepartureDate(flight.getDepartureTime());
+    	ticket.setSeat("A20");
+    	ticket.setPrice(new BigDecimal("400.00"));
+    	ticket.setSeatrsClass(SeatsClass.ECONOMY);
+    	em.persist(ticket);
     }
 }
