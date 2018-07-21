@@ -18,13 +18,13 @@ import lombok.Setter;
 @Table(name = "flight")
 public class Flight extends BaseEntity{
 	
-	@Column(name = "departure_time", length = 15)
+	@Column(name = "departure_time", length = 20)
 	private String departureTime; 
 	
 	@Column(name = "travel_time", length = 8)
 	private String travelTime;
 	
-	@Column(name = "arrival_time", length = 15)
+	@Column(name = "arrival_time", length = 20)
 	private String arrivalTime;
 	
 	@ManyToOne
